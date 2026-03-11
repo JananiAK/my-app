@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Product } from '@/lib/db';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function AdminDashboard() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -180,8 +181,8 @@ export default function AdminDashboard() {
                                             <tr key={product.id} className="hover:bg-secondary/20 transition-colors group">
                                                 <td className="px-5 py-4">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 rounded-sm overflow-hidden bg-secondary/50 border border-border/40 shrink-0">
-                                                            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                                                        <div className="relative w-10 h-10 rounded-sm overflow-hidden bg-secondary/50 border border-border/40 shrink-0">
+                                                            <Image src={product.image} alt={product.name} fill className="object-cover" />
                                                         </div>
                                                         <p className="font-medium text-sm text-foreground truncate max-w-[140px]">{product.name}</p>
                                                     </div>

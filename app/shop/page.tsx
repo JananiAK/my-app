@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Filter, SlidersHorizontal, Grid3X3, List, Loader2, X, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Product } from "@/lib/db";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { products } from "@/lib/data";
 
 // Define Cart Item Type
 export type CartItem = {
@@ -15,7 +14,7 @@ export type CartItem = {
 
 interface CartContextType {
     cartItems: CartItem[];
-    addToCart: (product: any, size: string, quantity?: number) => void;
+    addToCart: (product: Pick<CartItem, "id" | "name" | "price" | "image">, size: string, quantity?: number) => void;
     removeFromCart: (id: string, size: string) => void; // Remove specific size variant
     updateQuantity: (id: string, size: string, quantity: number) => void;
     clearCart: () => void;
@@ -28,7 +27,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-    const addToCart = (product: any, size: string, quantity = 1) => {
+    const addToCart = (product: Pick<CartItem, "id" | "name" | "price" | "image">, size: string, quantity = 1) => {
         setCartItems((prev) => {
             const existingItem = prev.find(
                 (item) => item.id === product.id && item.size === size

@@ -6,7 +6,8 @@ import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShieldCheck, CreditCard, Phone, Truck, CheckCircle2, ChevronRight } from "lucide-react";
+import { ShieldCheck, CreditCard, Phone, Truck, CheckCircle2, ChevronRight, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 type Step = 1 | 2 | 3;
 type PaymentMethod = "card" | "cod" | "whatsapp";
@@ -22,13 +23,67 @@ export default function CheckoutPage() {
     address: "", city: "", zip: "", country: "Sri Lanka",
   });
   const [ordered, setOrdered] = useState(false);
+  const [orderId, setOrderId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleField = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleOrder = () => {
-    setOrdered(true);
-    clearCart();
+  const handleOrder = async () => {
+    setLoading(true);
+
+    try {
+      // 1. Insert Order
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert([{
+          customer_email: form.email,
+          customer_phone: form.phone,
+          customer_first_name: form.firstName,
+          customer_last_name: form.lastName,
+          shipping_address: form.address,
+          shipping_city: form.city,
+          shipping_zip: form.zip,
+          shipping_country: form.country,
+          subtotal: subtotal,
+          discount: 0,
+          shipping_fee: 0,
+          total_amount: subtotal,
+          payment_method: paymentMethod,
+          status: 'pending'
+        }])
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // 2. Insert Order Items
+      const itemsPayload = cartItems.map(item => ({
+        order_id: orderData.id,
+        product_id: item.id,
+        product_name: item.name,
+        size: item.size,
+        color: "Default",
+        quantity: item.quantity,
+        unit_price: item.price,
+        total_price: item.price * item.quantity
+      }));
+
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(itemsPayload);
+
+      if (itemsError) throw itemsError;
+
+      setOrderId(orderData.order_number);
+      setOrdered(true);
+      clearCart();
+    } catch (error) {
+      console.error("Failed to place order:", error);
+      alert("Failed to place order. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (ordered) {
@@ -44,7 +99,7 @@ export default function CheckoutPage() {
               Thank you for your purchase. We&apos;ll send you a confirmation email shortly.
             </p>
             <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
-              Order #UA-{Math.random().toString(36).slice(2, 8).toUpperCase()}
+              Order #UA-{orderId}
             </p>
           </div>
           <div className="bg-secondary/20 border border-border/50 rounded-sm p-6 text-left space-y-2">
@@ -298,8 +353,9 @@ export default function CheckoutPage() {
                   <Button
                     className="flex-1 h-12 bg-primary text-white hover:bg-primary/90 rounded-sm uppercase tracking-wide text-xs font-bold shadow-xl shadow-primary/20"
                     onClick={handleOrder}
+                    disabled={loading}
                   >
-                    Place Order ✓
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Place Order ✓"}
                   </Button>
                 </div>
               </div>

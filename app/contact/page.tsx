@@ -2,15 +2,33 @@
 
 import { useState } from "react";
 import { Mail, Phone, MessageCircle, Send, Clock, CheckCircle2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function ContactPage() {
     const [sent, setSent] = useState(false);
+    const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleField = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+        setForm(f => ({ ...f, [e.target.id]: e.target.value }));
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        setTimeout(() => { setLoading(false); setSent(true); }, 1000);
+        try {
+            const { error } = await supabase
+                .from('contact_messages')
+                .insert([form]);
+                
+            if (error) throw error;
+            setSent(true);
+            setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+        } catch (error) {
+            console.error("Failed to send message:", error);
+            alert("Failed to send message. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -23,7 +41,7 @@ export default function ContactPage() {
                     <p className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-mono mb-3">Reach Out</p>
                     <h1 className="font-serif text-5xl md:text-6xl font-bold text-foreground">Get in Touch</h1>
                     <p className="text-muted-foreground text-lg font-light mt-4 max-w-lg">
-                        Questions about your order, sizing, or collections? We're happy to help.
+                        Questions about your order, sizing, or collections? We&apos;re happy to help.
                     </p>
                 </div>
             </div>
@@ -132,6 +150,8 @@ export default function ContactPage() {
                                                 id={id}
                                                 type={type}
                                                 required
+                                                value={form[id as keyof typeof form]}
+                                                onChange={handleField}
                                                 placeholder={placeholder}
                                                 className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/60"
                                             />
@@ -146,6 +166,8 @@ export default function ContactPage() {
                                     <input
                                         id="phone"
                                         type="tel"
+                                        value={form.phone}
+                                        onChange={handleField}
                                         placeholder="Your phone"
                                         className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/60"
                                     />
@@ -157,14 +179,16 @@ export default function ContactPage() {
                                     </label>
                                     <select
                                         id="subject"
+                                        value={form.subject}
+                                        onChange={handleField}
                                         className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors text-foreground"
                                     >
                                         <option value="">Select a topic...</option>
-                                        <option>Order / Delivery Inquiry</option>
-                                        <option>Product Question</option>
-                                        <option>Return / Exchange</option>
-                                        <option>Payment Issue</option>
-                                        <option>Other</option>
+                                        <option value="Order / Delivery Inquiry">Order / Delivery Inquiry</option>
+                                        <option value="Product Question">Product Question</option>
+                                        <option value="Return / Exchange">Return / Exchange</option>
+                                        <option value="Payment Issue">Payment Issue</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
 
@@ -176,6 +200,8 @@ export default function ContactPage() {
                                         id="message"
                                         required
                                         rows={5}
+                                        value={form.message}
+                                        onChange={handleField}
                                         placeholder="Write your message here..."
                                         className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/60 resize-none"
                                     />

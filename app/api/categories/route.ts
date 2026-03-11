@@ -3,7 +3,7 @@ import { getCategories } from '@/lib/db';
 
 export async function GET() {
     try {
-        const categories = getCategories();
+        const categories = await getCategories();
         return NextResponse.json(categories);
     } catch (error) {
         console.error('Error fetching categories:', error);

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import {
-    Package, ShoppingBag, CreditCard, MapPin, Heart,
+    Package, ShoppingBag, CreditCard, Heart,
     Clock, ChevronRight, LayoutDashboard, LogOut, User, Star
 } from "lucide-react";
 import { cn } from "@/lib/utils";

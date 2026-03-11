@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Loader2, X, Plus, Upload, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface ProductFormProps {
     productId?: string;
@@ -40,6 +41,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
         if (productId) {
             fetchProduct();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productId]);
 
     const fetchCategories = async () => {
@@ -361,7 +363,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                                 </div>
                             ) : formData.image ? (
                                 <>
-                                    <img src={formData.image} alt="Preview" className="w-full h-full object-cover group-hover:opacity-40 transition-opacity" />
+                                    <Image src={formData.image} alt="Preview" fill className="object-cover group-hover:opacity-40 transition-opacity" />
                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
                                         <div className="flex flex-col items-center gap-2">
                                             <Upload className="text-white" size={32} />

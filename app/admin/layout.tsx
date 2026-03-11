@@ -119,6 +119,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     // Close drawer on route change
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => { setDrawerOpen(false); }, [pathname]);
 
     return (

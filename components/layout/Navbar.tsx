@@ -48,6 +48,7 @@ export function Navbar() {
   }, []);
 
   // Close drawer on route change
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setIsOpen(false); setSearchOpen(false); }, [pathname]);
 
   const isActive = (href: string) =>

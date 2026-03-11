@@ -3,7 +3,7 @@ import { getDb, createProduct } from '@/lib/db';
 
 export async function GET() {
     try {
-        const products = getDb();
+        const products = await getDb();
         return NextResponse.json(products);
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Name and price are required' }, { status: 400 });
         }
 
-        const newProduct = createProduct(productData);
+        const newProduct = await createProduct(productData);
         return NextResponse.json(newProduct, { status: 201 });
     } catch (error) {
         console.error('Error creating product:', error);
