@@ -4,73 +4,84 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function Footer() {
-    return (
-        <footer className="bg-secondary/10 border-t">
-            <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
-                    {/* Brand */}
-                    <div className="space-y-4">
-                        <h3 className="font-serif text-2xl font-bold text-primary">Harahs Threads Thistle</h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                            Celebrating heritage through timeless elegance. Handcrafted traditional wear for the modern soul.
-                        </p>
-                        <div className="flex items-center gap-4">
-                            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                                <Instagram className="h-5 w-5" />
-                                <span className="sr-only">Instagram</span>
-                            </Link>
-                            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                                <Facebook className="h-5 w-5" />
-                                <span className="sr-only">Facebook</span>
-                            </Link>
-                            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                                <Twitter className="h-5 w-5" />
-                                <span className="sr-only">Twitter</span>
-                            </Link>
-                        </div>
-                    </div>
+  return (
+    <footer className="bg-background border-t py-16">
+      <div className="container mx-auto px-6">
 
-                    {/* Shop */}
-                    <div className="space-y-4">
-                        <h4 className="font-medium text-foreground">Shop</h4>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><Link href="/shop/sarees" className="hover:text-primary transition-colors">Sarees</Link></li>
-                            <li><Link href="/shop/kurtis" className="hover:text-primary transition-colors">Kurtis</Link></li>
-                            <li><Link href="/shop/lehengas" className="hover:text-primary transition-colors">Lehengas</Link></li>
-                            <li><Link href="/shop/suits" className="hover:text-primary transition-colors">Salwar Suits</Link></li>
-                            <li><Link href="/shop/new-arrivals" className="hover:text-primary transition-colors">New Arrivals</Link></li>
-                        </ul>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
 
-                    {/* Company */}
-                    <div className="space-y-4">
-                        <h4 className="font-medium text-foreground">Company</h4>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><Link href="/about" className="hover:text-primary transition-colors">Our Story</Link></li>
-                            <li><Link href="/sustainability" className="hover:text-primary transition-colors">Sustainability</Link></li>
-                            <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
-                            <li><Link href="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
-                            <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-                        </ul>
-                    </div>
+          {/* Brand */}
+          <div className="space-y-5">
+            <h3 className="font-serif text-2xl font-bold">Urban Aura</h3>
 
-                    {/* Newsletter */}
-                    <div className="space-y-4">
-                        <h4 className="font-medium text-foreground">Stay Connected</h4>
-                        <p className="text-sm text-muted-foreground">
-                            Subscribe to our newsletter for exclusive offers and updates.
-                        </p>
-                        <div className="flex flex-col gap-2">
-                            <Input type="email" placeholder="Enter your email" className="bg-background" />
-                            <Button>Subscribe</Button>
-                        </div>
-                    </div>
-                </div>
+            <p className="text-sm text-muted-foreground">
+              Urban Aura brings modern men's fashion with a blend of street style
+              and everyday comfort.
+            </p>
 
-                <div className="mt-12 pt-8 border-t border-border/50 text-center text-sm text-muted-foreground">
-                    <p>&copy; {new Date().getFullYear()} Harahs Threads Thistle. All rights reserved.</p>
-                </div>
+            <p className="text-sm text-muted-foreground">
+              WhatsApp Orders: +94 77 123 4567
+            </p>
+
+            <div className="flex gap-4">
+              <Instagram className="cursor-pointer hover:text-primary" />
+              <Facebook className="cursor-pointer hover:text-primary" />
+              <Twitter className="cursor-pointer hover:text-primary" />
             </div>
-        </footer>
-    );
+          </div>
+
+          {/* Shop */}
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Shop</h4>
+
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link href="/shop?category=tshirts">T-Shirts</Link></li>
+              <li><Link href="/shop?category=shirts">Shirts</Link></li>
+              <li><Link href="/shop?category=jeans">Jeans</Link></li>
+              <li><Link href="/shop?category=sneakers">Sneakers</Link></li>
+              <li><Link href="/shop?category=accessories">Accessories</Link></li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Company</h4>
+
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link href="/story">Our Story</Link></li>
+              <li><Link href="/contact">Contact Us</Link></li>
+              <li><Link href="/shop">Shop</Link></li>
+              <li><Link href="/auth/login">My Account</Link></li>
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Newsletter</h4>
+
+            <p className="text-sm text-muted-foreground mb-4">
+              Subscribe to receive updates about new arrivals and exclusive offers.
+            </p>
+
+            <div className="flex flex-col gap-3">
+              <Input placeholder="Email Address" type="email" />
+              <Button>Subscribe</Button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom Footer */}
+        <div className="mt-12 border-t pt-6 flex flex-col md:flex-row justify-between text-sm text-muted-foreground">
+          <p>© {new Date().getFullYear()} Urban Aura. All rights reserved.</p>
+
+          <div className="flex gap-6">
+            <Link href="#">Terms</Link>
+            <Link href="#">Privacy Policy</Link>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+  );
 }

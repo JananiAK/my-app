@@ -18,8 +18,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Harahs Threads Thistle | Elegant Traditional Wear",
-  description: "Discover heritage, elegance, and cultural craftsmanship in our collection of sarees, kurtis, and ethnic dresses.",
+  title: "Urban Aura | Premium Men's Fashion & Streetwear",
+  description: "Defined by the streets. Crafted for excellence. Explore the latest in premium t-shirts, shoes, and luxury timepieces.",
 };
 
 import { CartProvider } from "@/context/CartContext";

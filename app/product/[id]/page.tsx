@@ -1,4 +1,4 @@
-import { products } from "@/lib/data";
+import { getProduct } from "@/lib/db";
 import { ProductView } from "@/components/product/ProductView";
 import { notFound } from "next/navigation";
 
@@ -6,15 +6,9 @@ interface PageProps {
     params: Promise<{ id: string }>;
 }
 
-export async function generateStaticParams() {
-    return products.map((product) => ({
-        id: product.id,
-    }));
-}
-
 export default async function ProductPage({ params }: PageProps) {
     const { id } = await params;
-    const product = products.find((p) => p.id === id);
+    const product = getProduct(id);
 
     if (!product) {
         notFound();
