@@ -1,234 +1,62 @@
-"use client";
-
-import { useState } from "react";
-import { Mail, Phone, MessageCircle, Send, Clock, CheckCircle2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+import { ArrowRight, Phone, Instagram } from "lucide-react";
 
 export default function ContactPage() {
-    const [sent, setSent] = useState(false);
-    const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
-    const [loading, setLoading] = useState(false);
-
-    const handleField = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-        setForm(f => ({ ...f, [e.target.id]: e.target.value }));
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const { error } = await supabase
-                .from('contact_messages')
-                .insert([form]);
-                
-            if (error) throw error;
-            setSent(true);
-            setForm({ name: "", email: "", phone: "", subject: "", message: "" });
-        } catch (error) {
-            console.error("Failed to send message:", error);
-            alert("Failed to send message. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="min-h-screen bg-background">
-
-            {/* Header */}
-            <div className="relative bg-secondary/20 py-20 border-b border-border/50 overflow-hidden">
-                <div className="absolute -right-32 top-0 w-64 h-64 rounded-full bg-primary/5 blur-3xl" />
-                <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-                    <p className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-mono mb-3">Reach Out</p>
-                    <h1 className="font-serif text-5xl md:text-6xl font-bold text-foreground">Get in Touch</h1>
-                    <p className="text-muted-foreground text-lg font-light mt-4 max-w-lg">
-                        Questions about your order, sizing, or collections? We&apos;re happy to help.
-                    </p>
-                </div>
-            </div>
-
-            <div className="container mx-auto px-4 md:px-6 py-14 max-w-4xl">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
-
-                    {/* Contact Info */}
-                    <div className="md:col-span-2 space-y-8">
-                        <div>
-                            <h2 className="font-serif text-2xl font-bold mb-2">Contact Details</h2>
-                            <p className="text-muted-foreground text-sm leading-relaxed">
-                                Reach us directly — we usually respond within a few hours.
-                            </p>
-                        </div>
-
-                        <div className="space-y-5">
-                            {[
-                                {
-                                    icon: Phone,
-                                    label: "Call / WhatsApp",
-                                    value: "0741560507",
-                                    href: "tel:0741560507",
-                                    note: "Mon–Sat, 9am–7pm"
-                                },
-                                {
-                                    icon: Mail,
-                                    label: "Email",
-                                    value: "Thakshilavidhu@gmail.com",
-                                    href: "mailto:Thakshilavidhu@gmail.com",
-                                    note: "Response within 24hrs"
-                                },
-                                {
-                                    icon: MessageCircle,
-                                    label: "WhatsApp Order",
-                                    value: "Chat with us",
-                                    href: "https://wa.me/94741560507",
-                                    note: "Direct order via chat"
-                                },
-                            ].map(({ icon: Icon, label, value, href, note }) => (
-                                <a
-                                    key={label}
-                                    href={href}
-                                    target={href.startsWith("http") ? "_blank" : undefined}
-                                    rel="noopener noreferrer"
-                                    className="flex items-start gap-4 p-4 rounded-sm border border-border/50 bg-secondary/10 hover:border-primary/40 hover:bg-primary/5 transition-all group"
-                                >
-                                    <div className="w-10 h-10 rounded-sm bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:border-primary transition-all">
-                                        <Icon className="w-4.5 h-4.5 text-primary group-hover:text-white transition-colors" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[9px] uppercase tracking-widest text-muted-foreground font-bold font-mono">{label}</p>
-                                        <p className="text-sm font-semibold text-foreground mt-0.5">{value}</p>
-                                        <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1">
-                                            <Clock className="w-3 h-3" /> {note}
-                                        </p>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-
-                        {/* Business categories */}
-                        <div className="bg-secondary/10 border border-border/50 rounded-sm p-5 space-y-3">
-                            <p className="text-[9px] uppercase tracking-widest text-muted-foreground font-bold font-mono">We Sell</p>
-                            <div className="flex flex-wrap gap-2">
-                                {["T-Shirts", "Shirts", "Slippers", "Shoes", "Watches"].map(cat => (
-                                    <span key={cat} className="text-[9px] uppercase tracking-wide bg-primary/10 text-primary border border-primary/20 px-2.5 py-1 rounded-sm font-bold">
-                                        {cat}
-                                    </span>
-                                ))}
-                            </div>
-                            <p className="text-[10px] text-muted-foreground">🚚 Online delivery · 💳 Online payment</p>
-                        </div>
-                    </div>
-
-                    {/* Form */}
-                    <div className="md:col-span-3">
-                        {sent ? (
-                            <div className="flex flex-col items-center justify-center gap-6 h-full min-h-[400px] border border-border/50 rounded-sm bg-secondary/10 text-center px-8">
-                                <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-                                    <CheckCircle2 className="w-8 h-8 text-green-500" />
-                                </div>
-                                <div>
-                                    <h3 className="font-serif text-2xl font-bold mb-2">Message Sent!</h3>
-                                    <p className="text-muted-foreground">
-                                        We&apos;ve received your message and will get back to you shortly at{" "}
-                                        <strong className="text-primary">Thakshilavidhu@gmail.com</strong>
-                                    </p>
-                                </div>
-                                <button onClick={() => setSent(false)} className="text-xs text-muted-foreground hover:text-foreground transition-colors uppercase tracking-widest font-medium">
-                                    Send another message
-                                </button>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleSubmit} className="space-y-5">
-                                <div className="grid grid-cols-2 gap-4">
-                                    {[
-                                        { id: "name", label: "Your Name", placeholder: "Full name", type: "text" },
-                                        { id: "email", label: "Email Address", placeholder: "email@example.com", type: "email" },
-                                    ].map(({ id, label, placeholder, type }) => (
-                                        <div key={id} className="space-y-1.5">
-                                            <label htmlFor={id} className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground font-mono">
-                                                {label}
-                                            </label>
-                                            <input
-                                                id={id}
-                                                type={type}
-                                                required
-                                                value={form[id as keyof typeof form]}
-                                                onChange={handleField}
-                                                placeholder={placeholder}
-                                                className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/60"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="space-y-1.5">
-                                    <label htmlFor="phone" className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground font-mono">
-                                        Phone Number (optional)
-                                    </label>
-                                    <input
-                                        id="phone"
-                                        type="tel"
-                                        value={form.phone}
-                                        onChange={handleField}
-                                        placeholder="Your phone"
-                                        className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/60"
-                                    />
-                                </div>
-
-                                <div className="space-y-1.5">
-                                    <label htmlFor="subject" className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground font-mono">
-                                        Subject
-                                    </label>
-                                    <select
-                                        id="subject"
-                                        value={form.subject}
-                                        onChange={handleField}
-                                        className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors text-foreground"
-                                    >
-                                        <option value="">Select a topic...</option>
-                                        <option value="Order / Delivery Inquiry">Order / Delivery Inquiry</option>
-                                        <option value="Product Question">Product Question</option>
-                                        <option value="Return / Exchange">Return / Exchange</option>
-                                        <option value="Payment Issue">Payment Issue</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-
-                                <div className="space-y-1.5">
-                                    <label htmlFor="message" className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground font-mono">
-                                        Message
-                                    </label>
-                                    <textarea
-                                        id="message"
-                                        required
-                                        rows={5}
-                                        value={form.message}
-                                        onChange={handleField}
-                                        placeholder="Write your message here..."
-                                        className="w-full bg-secondary/20 border border-border/60 rounded-sm px-4 py-3 text-sm outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/60 resize-none"
-                                    />
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="w-full h-12 bg-primary text-white rounded-sm uppercase tracking-[0.2em] text-xs font-bold shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all disabled:opacity-70 flex items-center justify-center gap-2"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                            Sending...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Send className="w-4 h-4" />
-                                            Send Message
-                                        </>
-                                    )}
-                                </button>
-                            </form>
-                        )}
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="container mx-auto px-6 py-24 min-h-screen">
+      <div className="max-w-4xl mx-auto space-y-16">
+        <div className="text-center space-y-4">
+          <p className="text-red-600 text-xs font-mono uppercase tracking-[0.3em]">Reach Out</p>
+          <h1 className="font-serif text-5xl md:text-7xl text-white">Contact Us</h1>
+          <div className="w-16 h-[2px] bg-red-600 mx-auto" />
         </div>
-    );
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Details */}
+          <div className="bg-zinc-900 border border-white/5 p-10 rounded-sm space-y-8">
+            <h2 className="font-serif text-3xl text-white">Get in touch</h2>
+            <p className="text-gray-400 font-light leading-relaxed">
+              Have questions about our upcoming drops, need help with sizes, or checking on an order? We&apos;re here for you.
+            </p>
+            
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 text-gray-300">
+                <div className="w-12 h-12 bg-black flex items-center justify-center rounded-full border border-white/10 shrink-0">
+                  <Phone className="w-5 h-5 text-red-500" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest font-mono text-gray-500 mb-1">WhatsApp Support</p>
+                  <a href="https://wa.me/94770000000" className="text-white hover:text-red-500 transition-colors text-lg">+94 77 000 0000</a>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 text-gray-300">
+                <div className="w-12 h-12 bg-black flex items-center justify-center rounded-full border border-white/10 shrink-0">
+                  <Instagram className="w-5 h-5 text-red-500" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest font-mono text-gray-500 mb-1">Follow Us</p>
+                  <a href="https://instagram.com/urbanaura" target="_blank" rel="noreferrer" className="text-white hover:text-red-500 transition-colors text-lg">@urbanaura</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* About Section */}
+          <div className="bg-zinc-900 border border-red-900/30 p-10 rounded-sm flex flex-col justify-center space-y-6">
+            <h2 className="font-serif text-3xl text-white">The Brand</h2>
+            <p className="text-gray-400 font-light leading-relaxed">
+              Urban Aura is more than a clothing line; it&apos;s a lifestyle. Born from the streets and elevated by meticulous craftsmanship, our collections are strictly curated.
+            </p>
+            <p className="text-gray-400 font-light leading-relaxed">
+              By fulfilling orders directly via WhatsApp, we maintain a personal connection with our community. Exclusive drops, immediate support, and absolute authenticity.
+            </p>
+            <Link href="/shop" className="inline-flex items-center gap-2 text-red-500 hover:text-white transition-colors text-xs font-mono uppercase tracking-widest mt-4">
+              Explore Collection <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
